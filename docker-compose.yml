@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+
+  gps-ferrari-cli:
+    build:
+      context: ./docker/php/
+      dockerfile: Dockerfile
+    volumes:
+      - ./ferrari:/var/www
+      - composer:/root/.composer/cache
+
+  gps-lamborghini-cli:
+    build:
+      context: ./docker/php/
+      dockerfile: Dockerfile
+    volumes:
+      - ./lamborghini:/var/www
+      - composer:/root/.composer/cache
+
+  bunny-pubsub:
+    image: bigtruedata/gcloud-pubsub-emulator
+
+volumes:
+  composer:
