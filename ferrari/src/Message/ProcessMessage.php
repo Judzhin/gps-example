@@ -6,25 +6,25 @@ namespace App\Message;
  * Class ProcessMessage
  * @package App\Message
  */
-class ProcessMessage
+final class ProcessMessage
 {
-    /** @var string */
-    public $content;
+    /** @var array */
+    private $data = [];
 
     /**
      * ProcessMessage constructor.
-     * @param string $content
+     * @param array $data
      */
-    public function __construct(string $content)
+    public function __construct(array $data)
     {
-        $this->content = $content;
+        $this->data = $data;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getContent(): string
+    public function getData() : array
     {
-        return $this->content;
+        return $this->data;
     }
 }

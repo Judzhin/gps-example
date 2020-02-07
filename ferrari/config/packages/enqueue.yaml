@@ -1,0 +1,7 @@
+enqueue:
+  supercar_process:
+    transport:
+      dns: '%env(ENQUEUE_DSN)%'
+    client:
+      router_topic: supercar
+      router_queue: process

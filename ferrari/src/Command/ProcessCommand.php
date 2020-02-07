@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Message\ProcessMessage;
+use App\Producer\ProcessProducer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,19 +19,19 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 class ProcessCommand extends Command
 {
-    /** @var MessageBusInterface */
-    private $commonBus;
+    /** @var ProcessProducer */
+    private $processProducer;
 
-    protected static $defaultName = 'mq:process';
+    /** @var string  */
+    protected static $defaultName = 'gps:process';
 
     /**
      * ProcessCommand constructor.
-     *
-     * @param MessageBusInterface $commonBus
+     * @param ProcessProducer $processProducer
      */
-    public function __construct(MessageBusInterface $commonBus)
+    public function __construct(ProcessProducer $processProducer)
     {
-        $this->commonBus = $commonBus;
+        $this->processProducer = $processProducer;
         parent::__construct(self::$defaultName);
     }
 
@@ -55,14 +56,6 @@ class ProcessCommand extends Command
     {
         /** @var SymfonyStyle $io */
         $io = new SymfonyStyle($input, $output);
-
-        /** @var ProcessMessage $message */
-        $message = new ProcessMessage(sprintf(
-            'Send car work to process at %s', (new \DateTime)->format('d-m-Y H:i:s')
-        ));
-
-        $this->commonBus
-            ->dispatch(new Envelope($message));
 
         $io->writeln(sprintf('Send message "%s"', $message->getContent()));
 

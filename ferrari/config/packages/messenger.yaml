@@ -9,35 +9,6 @@ framework:
       # failed: 'doctrine://default?queue_name=failed'
       # sync: 'sync://'
 
-      process_message:
-        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-        serializer: messenger.transport.symfony_serializer
-        retry_strategy:
-          delay: 500
-        options:
-          exchange:
-            name: supercar
-            type: direct
-            default_publish_routing_key: process
-          queues:
-            process:
-              binding_keys: [process]
-
-      prepare_result_message:
-        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-        serializer: App\Message\PrepareResultSerializer
-        retry_strategy:
-          delay: 500
-        options:
-          exchange:
-            name: supercar
-            type: direct
-            default_publish_routing_key: result
-          queues:
-            result: ~
-
     routing:
       # Route your messages to the transports
       # 'App\Message\YourMessage': async
-      App\Message\ProcessMessage: process_message
-      App\MessageHandler\PrepareResultMessageHandler: prepare_result_message
