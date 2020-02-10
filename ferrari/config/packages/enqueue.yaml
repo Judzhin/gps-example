@@ -1,7 +1,8 @@
 enqueue:
-  supercar_process:
+  default:
     transport:
-      dns: '%env(ENQUEUE_DSN)%'
-    client:
-      router_topic: supercar
-      router_queue: process
+      dsn: '%env(resolve:ENQUEUE_DSN)%'
+    client: ~
+      # prefix: ''
+      # app_name: ''
+      # router_topic: 'supercar'WW

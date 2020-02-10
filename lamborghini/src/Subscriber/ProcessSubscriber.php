@@ -1,17 +1,18 @@
 <?php
-namespace App\Processor;
 
-use Enqueue\Client\CommandSubscriberInterface;
+namespace App\Subscriber;
+
+use Enqueue\Client\TopicSubscriberInterface;
 use Interop\Queue\Context;
 use Interop\Queue\Message;
 use Interop\Queue\Processor;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class PrepareProcessProcessor
- * @package App\Processor
+ * Class ProcessSubscriber
+ * @package App\Subscriber
  */
-class PrepareProcessProcessor implements Processor, CommandSubscriberInterface
+class ProcessSubscriber implements Processor, TopicSubscriberInterface
 {
     /** @var LoggerInterface */
     private $logger;
@@ -26,20 +27,18 @@ class PrepareProcessProcessor implements Processor, CommandSubscriberInterface
     }
 
     /**
+     * @inheritDoc
+     *
      * @param Message $message
      * @param Context $context
-     * @return object|string
+     * @return string
      */
-    public function process(Message $message, Context $context)
+    public function process(Message $message, Context $context): string
     {
-        /** @var array $body */
-        $body = json_decode($message->getBody(), true);
-
         try {
-            // Do something with the message received
+            dump($message->getBody());
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
             return self::REQUEUE;
         }
 
@@ -49,13 +48,11 @@ class PrepareProcessProcessor implements Processor, CommandSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedCommand(): array
+    public static function getSubscribedTopics(): array
     {
         return [
-            'processor_name' => 'mailer.processor',
-            'queueName' => 'emails',
-            'queueNameHardcoded' => true,
-            'exclusive' => true
+            'topic' => 'enqueue.default',
+            'queue' => 'enqueue.default',
         ];
     }
 }

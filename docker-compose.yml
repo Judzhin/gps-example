@@ -18,8 +18,8 @@ services:
       - ./lamborghini:/var/www
       - composer:/root/.composer/cache
 
-  bunny-pubsub:
-    image: bigtruedata/gcloud-pubsub-emulator
+  gps-sdk:
+    image: google/cloud-sdk
 
 volumes:
   composer:

@@ -2,16 +2,12 @@
 
 namespace App\Command;
 
-use App\Message\ProcessMessage;
-use App\Producer\ProcessProducer;
+use Enqueue\Client\Message;
+use Enqueue\Client\ProducerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Class ProcessCommand
@@ -19,29 +15,20 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 class ProcessCommand extends Command
 {
-    /** @var ProcessProducer */
-    private $processProducer;
+    /** @var ProducerInterface */
+    private $producer;
 
-    /** @var string  */
+    /** @var string */
     protected static $defaultName = 'gps:process';
 
     /**
      * ProcessCommand constructor.
-     * @param ProcessProducer $processProducer
+     * @param ProducerInterface $producer
      */
-    public function __construct(ProcessProducer $processProducer)
+    public function __construct(ProducerInterface $producer)
     {
-        $this->processProducer = $processProducer;
+        $this->producer = $producer;
         parent::__construct(self::$defaultName);
-    }
-
-    protected function configure()
-    {
-        $this
-            ->setDescription('Add a short description for your command')
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
     }
 
     /**
@@ -57,7 +44,18 @@ class ProcessCommand extends Command
         /** @var SymfonyStyle $io */
         $io = new SymfonyStyle($input, $output);
 
-        $io->writeln(sprintf('Send message "%s"', $message->getContent()));
+        /** @var array $data */
+        $data = [
+            'key' => 'value',
+            'datetime' => (new \DateTime)->format('d-m-Y H:i:s')
+        ];
+
+        // /** @var Message $message */
+        // $message = new Message($data);
+        // $this->producer->sendEvent('enqueue.default', $message);
+
+        $this->producer->sendEvent('enqueue.default', json_encode($data));
+        $io->writeln(sprintf('Send message "%s"', json_encode($data)));
 
         return 0;
     }

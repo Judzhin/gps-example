@@ -1,5 +1,8 @@
 {
     "require-dev": {
         "msbios/msbios": "^2.0"
-    }
+    },
+  "require": {
+    "ext-json": "*"
+  }
 }

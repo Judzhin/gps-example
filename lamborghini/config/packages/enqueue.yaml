@@ -1,4 +1,18 @@
 enqueue:
-  transport:
-    default: '%env(ENQUEUE_DSN)%'
-  client: ~
+  default:
+    transport:
+      dsn: '%env(resolve:ENQUEUE_DSN)%'
+    client:
+      # prefix: ''
+      # app_name: ''
+      # router_topic: 'supercar'
+      # router_queue: 'process'
+      # traceable_producer: true
+      # prefix: enqueue
+      # separator: .
+      # app_name: app
+      router_topic: 'enqueue.default'
+      router_queue: 'enqueue.default'
+      # router_processor: null
+      # redelivered_delay_time: 0
+      # default_queue: default

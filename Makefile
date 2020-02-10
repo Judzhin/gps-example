@@ -42,3 +42,6 @@ lamborghini-watch:
 
 lamborghini-stop-watching:
 	docker-compose run --rm gps-lamborghini-cli php bin/console messenger:stop-workers
+
+google-pull:
+	gcloud pubsub subscriptions pull --auto-ack process
